@@ -61,7 +61,7 @@ podTemplate(yaml: '''
 
     stage('Code Checkstyle') { 
       if (env.BRANCH_NAME != 'feature') {
-        echo 'Code Checkstyle' NOT feature so run it here :-)'
+        echo 'Code Checkstyle NOT feature so run it here :-)'
       } else {
         echo 'Code Checkstyle IS feature...skipping'
       }
