@@ -59,6 +59,14 @@ podTemplate(yaml: '''
       }
     }
 
+    stage('Code Checkstyle') { 
+      if (env.BRANCH_NAME != 'feature') {
+        echo 'Code Checkstyle' NOT feature so run it here :-)'
+      } else {
+        echo 'Code Checkstyle IS feature...skipping'
+      }
+    }    
+
     stage('Build Java Image') {
       container('kaniko') {
         stage('Build a gradle project') {
