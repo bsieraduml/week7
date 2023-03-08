@@ -78,13 +78,31 @@ podTemplate(yaml: '''
 
     }
 
-    stage('Code Checkstyle') { 
-      if (env.BRANCH_NAME != 'feature') {
-        echo 'Code Checkstyle NOT feature so run it here :-)'
-      } else {
-        echo 'Code Checkstyle IS feature...skipping'
-      }
-    }    
+    stage("Checkstyle") {
+        //playground runs no tests, feature runs all tests except Code Coverage
+        if (env.BRANCH_NAME != 'feature' && env.BRANCH_NAME != 'playground') {      
+          try {
+              sh '''
+            pwd
+            cd Chapter08/sample1
+            ./gradlew checkstyleMain
+              ./gradlew jacocoTestReport
+              '''
+          } catch (Exception E) {
+              echo 'Failure detected'
+          }
+
+          // from the HTML publisher plugin
+          // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
+          publishHTML (target: [
+              reportDir: 'Chapter08/sample1/build/reports/checkstyle',
+              reportFiles: 'main.html',
+              reportName: "JaCoCo Checkstyle"
+          ]) 
+        } else {
+          echo 'Skip Checkstyle for branch ' + env.BRANCH_NAME 
+        }                      
+    }                
 
     stage('Build Java Image') {
       container('kaniko') {
