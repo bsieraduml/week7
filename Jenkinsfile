@@ -51,13 +51,11 @@ podTemplate(yaml: '''
       }
     }
 
-    stage('Unit test') {
-      steps {
-        if (env.BRANCH_NAME != 'playground') {
-          echo 'Unit Test NOT playground'
-        } else {
-          echo 'Unit Test IS playground...skipping'
-        }
+    stage('Unit test') { 
+      if (env.BRANCH_NAME != 'playground') {
+        echo 'Unit Test NOT playground'
+      } else {
+        echo 'Unit Test IS playground...skipping'
       }
     }
 
