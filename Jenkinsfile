@@ -51,6 +51,27 @@ podTemplate(yaml: '''
       }
     }
 
+    stage('Unit test') {
+      when {
+        not {
+          branch "playground"
+        }
+      }
+      steps {
+        echo 'Unit Test NOT playground'
+      }
+    }
+    stage('Code Checkstyle') {
+      when {
+        not {
+          branch "feature"
+        }
+      }
+      steps {
+        echo 'Code Checkstyle NOT feature'
+      }
+    }
+
     stage('Build Java Image') {
       container('kaniko') {
         stage('Build a gradle project') {
