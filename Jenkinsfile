@@ -42,7 +42,9 @@ podTemplate(yaml: '''
         stage('Build a gradle project') {
           sh '''
           pwd
-          //cd '/home/jenkins/agent/workspace/week7_' + env.BRANCH_NAME + '/Chapter08/sample1'
+          /* 
+            cd '/home/jenkins/agent/workspace/week7_' + env.BRANCH_NAME + '/Chapter08/sample1'
+          */
           cd /Chapter08/sample1
           chmod +x gradlew
           ./gradlew build
