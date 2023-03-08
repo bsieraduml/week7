@@ -52,23 +52,12 @@ podTemplate(yaml: '''
     }
 
     stage('Unit test') {
-      when {
-        not {
-          branch "playground"
-        }
-      }
       steps {
-        echo 'Unit Test NOT playground'
-      }
-    }
-    stage('Code Checkstyle') {
-      when {
-        not {
-          branch "feature"
+        if (env.BRANCH_NAME != 'playground') {
+          echo 'Unit Test NOT playground'
+        } else {
+          echo 'Unit Test IS playground...skipping'
         }
-      }
-      steps {
-        echo 'Code Checkstyle NOT feature'
       }
     }
 
