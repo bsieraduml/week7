@@ -51,12 +51,31 @@ podTemplate(yaml: '''
       }
     }
 
-    stage('Unit test') { 
-      if (env.BRANCH_NAME != 'playground') {
-        echo 'Unit Test NOT playground'
-      } else {
-        echo 'Unit Test IS playground...skipping'
-      }
+    stage("Code coverage") {
+        //playground runs no tests, feature runs all tests except Code Coverage
+        if (env.BRANCH_NAME != 'feature' && env.BRANCH_NAME != 'playground') {
+          try {
+              sh '''
+            pwd
+            cd Chapter08/sample1
+            ./gradlew jacocoTestCoverageVerification
+              ./gradlew jacocoTestReport
+              '''
+          } catch (Exception E) {
+              echo 'Failure detected'
+          }
+
+          // from the HTML publisher plugin
+          // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
+          publishHTML (target: [
+              reportDir: 'Chapter08/sample1/build/reports/tests/test',
+              reportFiles: 'index.html',
+              reportName: "JaCoCo Report"
+          ])       
+        } else {
+          echo 'Skip Code coverage for branch ' + env.BRANCH_NAME
+        }
+
     }
 
     stage('Code Checkstyle') { 
