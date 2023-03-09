@@ -52,38 +52,41 @@ podTemplate(yaml: '''
           mv ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
           '''
         }
+        
+        stage("Code coverage") {
+            //playground runs no tests, feature runs all tests except Code Coverage
+            if (env.BRANCH_NAME != 'feature' && env.BRANCH_NAME != 'playgroundXX') {
+              try {
+                sh '''
+                pwd
+                echo 'call chmod +x gradlew'
+                chmod +x gradlew
+                echo 'call sudo chmod -R 777 for root dir'
+                chmod -R 777 gradlew
+                ./gradlew jacocoTestCoverageVerification --debug
+                ./gradlew jacocoTestReport --debug
+                  '''
+              } catch (Exception E) {
+                  echo 'Failure detected'
+              }
+
+              // from the HTML publisher plugin
+              // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
+              publishHTML (target: [
+                  reportDir: 'build/reports/tests/test',
+                  reportFiles: 'index.html',
+                  reportName: "JaCoCo Report"
+              ])       
+            } else {
+              echo 'Skip Code coverage for branch ' + env.BRANCH_NAME
+            }
+
+        }  
+
       }
     }
 
-    stage("Code coverage") {
-        //playground runs no tests, feature runs all tests except Code Coverage
-        if (env.BRANCH_NAME != 'feature' && env.BRANCH_NAME != 'playgroundXX') {
-          try {
-            sh '''
-            pwd
-            echo 'call chmod +x gradlew'
-            chmod +x gradlew
-            echo 'call sudo chmod -R 777 for root dir'
-            chmod -R 777 gradlew
-            ./gradlew jacocoTestCoverageVerification --debug
-            ./gradlew jacocoTestReport --debug
-              '''
-          } catch (Exception E) {
-              echo 'Failure detected'
-          }
 
-          // from the HTML publisher plugin
-          // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
-          publishHTML (target: [
-              reportDir: 'build/reports/tests/test',
-              reportFiles: 'index.html',
-              reportName: "JaCoCo Report"
-          ])       
-        } else {
-          echo 'Skip Code coverage for branch ' + env.BRANCH_NAME
-        }
-
-    }
 
     stage("Checkstyle") {
         //playground runs no tests, feature runs all tests except Code Coverage
