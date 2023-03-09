@@ -37,7 +37,7 @@ podTemplate(yaml: '''
 ''') {
   node(POD_LABEL) {
     stage('Build a gradle project') {
-      git 'https://github.com/bsieraduml/week6.git'
+      git branch: 'main', url: 'https://github.com/bsieraduml/week6.git'
       container('gradle') {
         stage('Build a gradle project') {
           sh '''
