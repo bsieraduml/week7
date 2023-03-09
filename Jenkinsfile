@@ -42,6 +42,7 @@ podTemplate(yaml: '''
         stage('Build a gradle project') {
           sh '''
           pwd
+          java -version 2>&1 | head -1 | cut -d'"' -f2 | sed '/^1\./s///' | cut -d'.' -f1
           echo 'call chmod +x gradlew'
           chmod +x gradlew
           ./gradlew build
