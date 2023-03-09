@@ -93,7 +93,7 @@ podTemplate(yaml: '''
                 // from the HTML publisher plugin
                 // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
                 publishHTML (target: [
-                    reportDir: 'Chapter08/sample1/build/reports/checkstyle',
+                    reportDir: 'build/reports/checkstyle',
                     reportFiles: 'main.html',
                     reportName: "JaCoCo Checkstyle"
                 ]) 
