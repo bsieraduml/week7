@@ -80,15 +80,18 @@ podTemplate(yaml: '''
 
     stage("Checkstyle") {
         //playground runs no tests, feature runs all tests except Code Coverage
-        if (env.BRANCH_NAME != 'playgroundXX') {      
+        if (env.BRANCH_NAME != 'playgroundXX') {               
           try {
               sh '''
             pwd
             cd Chapter08/sample1
+            chmod +x gradlew
             echo 'START GRADLEW STATUS'
             ./gradlew --status
             echo 'STOP GRADLEW STATUS'
+            echo 'call GRADLEW CHECKSTYLEMAIN'
             ./gradlew checkstyleMain
+            echo 'call GRADLEW JACOCOTESTREPORT'
               ./gradlew jacocoTestReport
               '''
           } catch (Exception E) {
