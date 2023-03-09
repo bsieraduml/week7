@@ -63,6 +63,8 @@ podTemplate(yaml: '''
             pwd
             echo 'call chmod +x gradlew'
             chmod +x gradlew
+            echo 'call sudo chmod -R 777 for root dir'
+            sudo chmod -R 777 ./
             ./gradlew jacocoTestCoverageVerification
             ./gradlew jacocoTestReport
               '''
