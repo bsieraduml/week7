@@ -57,7 +57,7 @@ podTemplate(yaml: '''
           try {
             sh '''
             pwd
-            /* cd Chapter08/sample1 */
+            echo 'call chmod +x gradlew'
             chmod +x gradlew
             ./gradlew jacocoTestCoverageVerification
             ./gradlew jacocoTestReport
@@ -85,7 +85,7 @@ podTemplate(yaml: '''
           try {
               sh '''
             pwd
-            /* cd Chapter08/sample1 */
+            echo 'call chmod +x gradlew'
             chmod +x gradlew
             echo 'START GRADLEW STATUS'
             ./gradlew --status
