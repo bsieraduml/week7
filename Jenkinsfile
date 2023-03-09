@@ -14,7 +14,7 @@ pipeline {
           }
           stage("Unit test") {
                when {
-                    not { branch 'playground' }
+                    not { branch 'playgroundX' }
                }               
                steps {
                     echo 'Unit test => branch' + env.BRANCH_NAME
@@ -25,7 +25,7 @@ pipeline {
                when {
                     not {
                          anyOf {
-                              branch 'playground';
+                              branch 'playgroundX';
                               branch 'feature'
                          }
                     }
@@ -38,7 +38,7 @@ pipeline {
           }
           stage("Static code analysis not main branch") {
                when {
-                    not { branch 'playground' }
+                    not { branch 'playgroundX' }
                }                    
                steps {
                     echo 'Static code analysis=> branch' + env.BRANCH_NAME
