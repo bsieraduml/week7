@@ -37,12 +37,12 @@ podTemplate(yaml: '''
 ''') {
   node(POD_LABEL) {
     stage('Build a gradle project') {
-      git 'https://github.com/bsieraduml/Continuous-Delivery-with-Docker-and-Jenkins-Second-Edition.git'
+      git 'https://github.com/bsieraduml/week6.git'
       container('gradle') {
         stage('Build a gradle project') {
           sh '''
           pwd
-          cd Chapter08/sample1
+          /* cd Chapter08/sample1 */
           chmod +x gradlew
           ./gradlew build
           mv ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
@@ -55,9 +55,9 @@ podTemplate(yaml: '''
         //playground runs no tests, feature runs all tests except Code Coverage
         if (env.BRANCH_NAME != 'feature' && env.BRANCH_NAME != 'playgroundXX') {
           try {
-              sh '''
+            sh '''
             pwd
-            cd Chapter08/sample1
+            /* cd Chapter08/sample1 */
             chmod +x gradlew
             ./gradlew jacocoTestCoverageVerification
             ./gradlew jacocoTestReport
@@ -85,7 +85,7 @@ podTemplate(yaml: '''
           try {
               sh '''
             pwd
-            cd Chapter08/sample1
+            /* cd Chapter08/sample1 */
             chmod +x gradlew
             echo 'START GRADLEW STATUS'
             ./gradlew --status
