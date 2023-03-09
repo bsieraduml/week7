@@ -113,7 +113,7 @@ podTemplate(yaml: '''
       //only if the build succeeds; never for the playground branch
       if (env.BRANCH_NAME != 'playground') {
         container('kaniko') {
-          stage('Build a gradle project') {
+          stage('Build Image & Push to Dockerhub') {
             
               tagName = 'bsieraduml/calculator'
               if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
@@ -133,14 +133,19 @@ podTemplate(yaml: '''
             echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
             echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
             mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
-
+            '''
               if [[ env.BRANCH_NAME = 'feature' ]] 
               then
-                /kaniko/executor --context `pwd` --destination echo '{$tagName}'
+                sh '''
+                echo 'push feature image'
+                /kaniko/executor --context `pwd` --destination bsieraduml/calculator-feature:0.1
+                '''
               else    
-                /kaniko/executor --context `pwd` --destination echo '{$tagName}'
+                sh '''
+                echo 'push release image'
+                /kaniko/executor --context `pwd` --destination bsieraduml/calculator:1.0
+                '''
               fi
-            '''
           }
         }
       } else {
