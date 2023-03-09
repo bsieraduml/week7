@@ -81,7 +81,7 @@ podTemplate(yaml: '''
                   ./gradlew checkstyleMain
                   ./gradlew jacocoTestReport
                     '''
-                } catch (Exception E) {
+                } catch (err) {
                     echo 'Failure detected'
                 }
 
