@@ -79,7 +79,7 @@ podTemplate(yaml: '''
 
         stage("Checkstyle") {
               //playground runs no tests, feature runs all tests except Code Coverage
-              if (env.BRANCH_NAME != 'playgroundXX') {               
+              if (env.BRANCH_NAME != 'playground') {               
                 try {
                     sh '''
                   chmod +x gradlew    
@@ -110,17 +110,23 @@ podTemplate(yaml: '''
                 
 
     stage('Build Java Image') {
-      container('kaniko') {
-        stage('Build a gradle project') {
-          sh '''
-          echo 'FROM openjdk:8-jre' > Dockerfile
-          echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
-          echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
-          mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
-          /kaniko/executor --context `pwd` --destination bsieraduml/hello-kaniko:1.0
-          '''
+      //only if the build succeeds; never for the playground branch
+      if (env.BRANCH_NAME != 'playground') {
+        container('kaniko') {
+          stage('Build a gradle project') {
+            sh '''
+            echo 'FROM openjdk:8-jre' > Dockerfile
+            echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
+            echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
+            mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
+            /kaniko/executor --context `pwd` --destination bsieraduml/hello-kaniko:1.0
+            '''
+          }
         }
+      } else {
+        echo 'Not running Build Java Image for branch => ' + env.BRANCH_NAME 
       }
+      
     }
 
   }
