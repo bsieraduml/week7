@@ -14,27 +14,34 @@ pipeline {
           }
           stage("Unit test") {
                when {
-                    not { branch 'main' }
+                    not { branch 'playground' }
                }               
                steps {
-                    echo 'Unit test not main branch'
+                    echo 'Unit test => branch' + env.BRANCH_NAME
                     sh "./gradlew test"
                }
           }
           stage("Code coverage") {
-                               
+               when {
+                    not {
+                         anyOf {
+                              branch 'playground';
+                              branch 'feature'
+                         }
+                    }
+               }            
                steps {
-                    echo 'Code coverage only main branch'
+                    echo 'Code coverage => branch' + env.BRANCH_NAME
                     sh "./gradlew jacocoTestReport"
                     sh "./gradlew jacocoTestCoverageVerification"
                }
           }
           stage("Static code analysis not main branch") {
                when {
-                    not { branch 'main' }
-               }                 
+                    not { branch 'playground' }
+               }                    
                steps {
-                    echo 'Static code analysis'
+                    echo 'Static code analysis=> branch' + env.BRANCH_NAME
                     sh "./gradlew checkstyleMain"
                }
           }
