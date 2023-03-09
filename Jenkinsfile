@@ -115,11 +115,11 @@ podTemplate(yaml: '''
         container('kaniko') {
           stage('Build a gradle project') {
             script {
-              tagName = 'calculator'
+              tagName = 'bsieraduml/calculator'
               if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
-                  tagName = 'calculator:1.0'
+                  tagName = 'bsieraduml/calculator:1.0'
               } else if (env.BRANCH_NAME == 'feature') {
-                  tagName = 'calculator-feature:0.1'
+                  tagName = 'bsieraduml/calculator-feature:0.1'
               }
               else 
               {
@@ -133,7 +133,7 @@ podTemplate(yaml: '''
             echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
             echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
             mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
-            /kaniko/executor --context `pwd` --destination 'bsieraduml/${tagName}'
+            /kaniko/executor --context `pwd` --destination ${tagName}
             '''
           }
         }
