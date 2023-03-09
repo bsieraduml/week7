@@ -82,16 +82,9 @@ podTemplate(yaml: '''
               if (env.BRANCH_NAME != 'playgroundXX') {               
                 try {
                     sh '''
-                  pwd
-                  echo 'call chmod +x gradlew'
-                  chmod +x gradlew
-                  echo 'START GRADLEW STATUS'
-                  ./gradlew --status
-                  echo 'STOP GRADLEW STATUS'
-                  echo 'call GRADLEW CHECKSTYLEMAIN'
+                  chmod +x gradlew    
                   ./gradlew checkstyleMain
-                  echo 'call GRADLEW JACOCOTESTREPORT'
-                    ./gradlew jacocoTestReport
+                  ./gradlew jacocoTestReport
                     '''
                 } catch (Exception E) {
                     echo 'Failure detected'
