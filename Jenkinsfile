@@ -81,8 +81,8 @@ podTemplate(yaml: '''
                   ./gradlew checkstyleMain
                   ./gradlew jacocoTestReport
                     '''
-                } catch (err) {
-                    echo 'Failure detected'
+                } catch (Exception ex) {
+                    echo 'Failure detected in Checkstyle...ben'
                 }
 
                 // from the HTML publisher plugin
