@@ -104,7 +104,7 @@ podTemplate(yaml: '''
       if (env.BRANCH_NAME != 'playground' && "${currentBuild.currentResult}" == "SUCCESS") {
         container('kaniko') {
           stage('Build Image & Push to Dockerhub') {
-            
+            echo 'currentBuild.currentResult == ' + "${currentBuild.currentResult}"
             sh '''
             echo 'Creating Docker Container...'
             echo 'FROM openjdk:8-jre' > Dockerfile
