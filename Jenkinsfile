@@ -6,11 +6,8 @@ pipeline {
      stages {
           stage("Compile") {
                steps {
+                    git branch: 'main', url: 'https://github.com/bsieraduml/week6.git'
                     echo 'Compile all branches'
-                    git update-index --chmod=+x gradlew
-                    git add .
-                    git commit -m "Changing permission of gradlew"
-                    git push
                     sh "chmod +x gradlew"
                     sh "./gradlew compileJava"
                }
