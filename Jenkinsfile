@@ -52,19 +52,14 @@ podTemplate(yaml: '''
           mv ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
           '''
         }
-        
+
         stage("Code coverage") {
             //playground runs no tests, feature runs all tests except Code Coverage
             if (env.BRANCH_NAME != 'feature' && env.BRANCH_NAME != 'playgroundXX') {
               try {
                 sh '''
-                pwd
-                echo 'call chmod +x gradlew'
-                chmod +x gradlew
-                echo 'call sudo chmod -R 777 for root dir'
-                chmod -R 777 gradlew
-                ./gradlew jacocoTestCoverageVerification --debug
-                ./gradlew jacocoTestReport --debug
+                ./gradlew jacocoTestCoverageVerification
+                ./gradlew jacocoTestReport
                   '''
               } catch (Exception E) {
                   echo 'Failure detected'
@@ -80,45 +75,46 @@ podTemplate(yaml: '''
             } else {
               echo 'Skip Code coverage for branch ' + env.BRANCH_NAME
             }
-
         }  
+
+        stage("Checkstyle") {
+              //playground runs no tests, feature runs all tests except Code Coverage
+              if (env.BRANCH_NAME != 'playground') {               
+                try {
+                    sh '''
+                  pwd
+                  echo 'call chmod +x gradlew'
+                  chmod +x gradlew
+                  echo 'START GRADLEW STATUS'
+                  ./gradlew --status
+                  echo 'STOP GRADLEW STATUS'
+                  echo 'call GRADLEW CHECKSTYLEMAIN'
+                  ./gradlew checkstyleMain
+                  echo 'call GRADLEW JACOCOTESTREPORT'
+                    ./gradlew jacocoTestReport
+                    '''
+                } catch (Exception E) {
+                    echo 'Failure detected'
+                }
+
+                // from the HTML publisher plugin
+                // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
+                publishHTML (target: [
+                    reportDir: 'Chapter08/sample1/build/reports/checkstyle',
+                    reportFiles: 'main.html',
+                    reportName: "JaCoCo Checkstyle"
+                ]) 
+              } else {
+                echo 'Skip Checkstyle for branch ' + env.BRANCH_NAME 
+              }                      
+          }   
 
       }
     }
 
 
 
-    stage("Checkstyle") {
-        //playground runs no tests, feature runs all tests except Code Coverage
-        if (env.BRANCH_NAME != 'playground') {               
-          try {
-              sh '''
-            pwd
-            echo 'call chmod +x gradlew'
-            chmod +x gradlew
-            echo 'START GRADLEW STATUS'
-            ./gradlew --status
-            echo 'STOP GRADLEW STATUS'
-            echo 'call GRADLEW CHECKSTYLEMAIN'
-            ./gradlew checkstyleMain
-            echo 'call GRADLEW JACOCOTESTREPORT'
-              ./gradlew jacocoTestReport
-              '''
-          } catch (Exception E) {
-              echo 'Failure detected'
-          }
-
-          // from the HTML publisher plugin
-          // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
-          publishHTML (target: [
-              reportDir: 'Chapter08/sample1/build/reports/checkstyle',
-              reportFiles: 'main.html',
-              reportName: "JaCoCo Checkstyle"
-          ]) 
-        } else {
-          echo 'Skip Checkstyle for branch ' + env.BRANCH_NAME 
-        }                      
-    }                
+                
 
     stage('Build Java Image') {
       container('kaniko') {
