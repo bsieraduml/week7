@@ -64,7 +64,7 @@ podTemplate(yaml: '''
             echo 'call chmod +x gradlew'
             chmod +x gradlew
             echo 'call sudo chmod -R 777 for root dir'
-            chmod -R 777 ./
+            chmod -R 777 gradlew
             ./gradlew jacocoTestCoverageVerification
             ./gradlew jacocoTestReport
               '''
@@ -75,7 +75,7 @@ podTemplate(yaml: '''
           // from the HTML publisher plugin
           // https://www.jenkins.io/doc/pipeline/steps/htmlpublisher/
           publishHTML (target: [
-              reportDir: 'Chapter08/sample1/build/reports/tests/test',
+              reportDir: 'build/reports/tests/test',
               reportFiles: 'index.html',
               reportName: "JaCoCo Report"
           ])       
