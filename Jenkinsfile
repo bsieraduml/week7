@@ -65,8 +65,8 @@ podTemplate(yaml: '''
             chmod +x gradlew
             echo 'call sudo chmod -R 777 for root dir'
             chmod -R 777 gradlew
-            ./gradlew jacocoTestCoverageVerification
-            ./gradlew jacocoTestReport
+            ./gradlew jacocoTestCoverageVerification --debug
+            ./gradlew jacocoTestReport --debug
               '''
           } catch (Exception E) {
               echo 'Failure detected'
