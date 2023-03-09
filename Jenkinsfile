@@ -134,10 +134,11 @@ podTemplate(yaml: '''
             echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
             mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
 
-              if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
-                  /kaniko/executor --context `pwd` --destination bsieraduml/calculator:1.0
-              } else if (env.BRANCH_NAME == 'feature') {
-                  /kaniko/executor --context `pwd` --destination bsieraduml/calculator-feature:0.1'
+              if (env.BRANCH_NAME = 'feature') {
+                /kaniko/executor --context `pwd` --destination bsieraduml/calculator-feature:0.1
+                  
+              } else {
+                /kaniko/executor --context `pwd` --destination bsieraduml/calculator:1.0
               }
             '''
           }
