@@ -116,9 +116,9 @@ podTemplate(yaml: '''
           stage('Build a gradle project') {
             script {
               tagName = 'calculator'
-              if (env.BRANCH_NAME = 'main' || env.BRANCH_NAME = 'release') {
+              if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
                   tagName = 'calculator:1.0'
-              } else if (env.BRANCH_NAME = 'feature') {
+              } else if (env.BRANCH_NAME == 'feature') {
                   tagName = 'calculator-feature:0.1'
               }
               else 
