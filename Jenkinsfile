@@ -7,6 +7,10 @@ pipeline {
           stage("Compile") {
                steps {
                     echo 'Compile all branches'
+                    git update-index --chmod=+x gradlew
+                    git add .
+                    git commit -m "Changing permission of gradlew"
+                    git push
                     sh "chmod +x gradlew"
                     sh "./gradlew compileJava"
                }
