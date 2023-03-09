@@ -53,7 +53,7 @@ podTemplate(yaml: '''
 
     stage("Code coverage") {
         //playground runs no tests, feature runs all tests except Code Coverage
-        if (env.BRANCH_NAME != 'feature' && env.BRANCH_NAME != 'playground') {
+        if (env.BRANCH_NAME != 'feature' && env.BRANCH_NAME != 'playgroundXX') {
           try {
               sh '''
             pwd
@@ -80,7 +80,7 @@ podTemplate(yaml: '''
 
     stage("Checkstyle") {
         //playground runs no tests, feature runs all tests except Code Coverage
-        if (env.BRANCH_NAME != 'playgroundXX') {               
+        if (env.BRANCH_NAME != 'playground') {               
           try {
               sh '''
             pwd
