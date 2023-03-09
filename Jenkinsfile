@@ -42,16 +42,11 @@ podTemplate(yaml: '''
         stage('Build a gradle project') {
           sh '''
           pwd
-          echo 'java version'
-          java -version
-          echo 'javac version'
-          javac -version
-          echo 'call chmod +x gradlew'
           chmod +x gradlew
           ./gradlew build
           mv ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
           '''
-        }
+        } // stage build a gradle project
 
         stage("Code coverage") {
             //playground runs no tests, feature runs all tests except Code Coverage
@@ -75,7 +70,7 @@ podTemplate(yaml: '''
             } else {
               echo 'Skip Code coverage for branch ' + env.BRANCH_NAME
             }
-        }  
+        } // stage code coverage  
 
         stage("Checkstyle") {
               //playground runs no tests, feature runs all tests except Code Coverage
@@ -100,32 +95,15 @@ podTemplate(yaml: '''
               } else {
                 echo 'Skip Checkstyle for branch ' + env.BRANCH_NAME 
               }                      
-          }   
-
+          } // stage checkstyle   
       }
-    }
-
-
-
-                
+    }        
 
     stage('Build Java Image') {
       //only if the build succeeds; never for the playground branch
-      if (env.BRANCH_NAME != 'playground') {
+      if (env.BRANCH_NAME != 'playground' && ${currentBuild.currentResult} == SUCCESS) {
         container('kaniko') {
           stage('Build Image & Push to Dockerhub') {
-            
-              tagName = 'bsieraduml/calculator'
-              if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
-                  tagName = 'bsieraduml/calculator:1.0'
-              } else if (env.BRANCH_NAME == 'feature') {
-                  tagName = 'bsieraduml/calculator-feature:0.1'
-              }
-              else 
-              {
-                error "Unsupported Branch Name = " + env.BRANCH_NAME  
-              }
-              echo 'tagName=' + tagName
             
             sh '''
             echo 'Creating Docker Container...'
@@ -134,25 +112,25 @@ podTemplate(yaml: '''
             echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
             mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
             '''
-              if (env.BRANCH_NAME == 'feature') { 
-              
-                sh '''
-                echo 'push feature image'
-                /kaniko/executor --context `pwd` --destination bsieraduml/calculator-feature:0.1
-                '''
-              } else {    
-                sh '''
-                echo 'push release image'
-                /kaniko/executor --context `pwd` --destination bsieraduml/calculator:1.0
-                '''
-            }
-          }
-        }
+            if (env.BRANCH_NAME == 'feature') { 
+            
+              sh '''
+              echo 'push feature image'
+              /kaniko/executor --context `pwd` --destination bsieraduml/calculator-feature:0.1
+              '''
+            } else {    
+              sh '''
+              echo 'push release image'
+              /kaniko/executor --context `pwd` --destination bsieraduml/calculator:1.0
+              '''
+            } 
+          } //stage (inner)
+        } //container (kaniko)
       } else {
         echo 'Not running Build Java Image for branch => ' + env.BRANCH_NAME 
-      }
-      
-    }
+        echo 'currentBuild.currentResult == ' + ${currentBuild.currentResult}
+      }       
+    } //stage (outer)
 
-  }
+  } // node pod label
 }
