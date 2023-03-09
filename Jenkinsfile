@@ -114,7 +114,7 @@ podTemplate(yaml: '''
       if (env.BRANCH_NAME != 'playground') {
         container('kaniko') {
           stage('Build a gradle project') {
-            script {
+            
               tagName = 'bsieraduml/calculator'
               if (env.BRANCH_NAME == 'main' || env.BRANCH_NAME == 'release') {
                   tagName = 'bsieraduml/calculator:1.0'
@@ -126,7 +126,7 @@ podTemplate(yaml: '''
                 error "Unsupported Branch Name = " + env.BRANCH_NAME  
               }
               echo 'tagName=' + tagName
-            }
+            
             sh '''
             echo 'Creating Docker Container...'
             echo 'FROM openjdk:8-jre' > Dockerfile
