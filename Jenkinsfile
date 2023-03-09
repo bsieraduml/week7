@@ -85,6 +85,9 @@ podTemplate(yaml: '''
               sh '''
             pwd
             cd Chapter08/sample1
+            echo 'START GRADLEW STATUS'
+            ./gradlew --status
+            echo 'STOP GRADLEW STATUS'
             ./gradlew checkstyleMain
               ./gradlew jacocoTestReport
               '''
