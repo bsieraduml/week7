@@ -114,13 +114,26 @@ podTemplate(yaml: '''
       if (env.BRANCH_NAME != 'playground') {
         container('kaniko') {
           stage('Build a gradle project') {
+            script {
+              tagName = 'calculator'
+              if (env.BRANCH_NAME = 'main' || env.BRANCH_NAME = 'release') {
+                  tagName = 'calculator:1.0'
+              } else if (env.BRANCH_NAME = 'feature') {
+                  tagName = 'calculator-feature:0.1'
+              }
+              else 
+              {
+                error "Unsupported Branch Name = " + env.BRANCH_NAME  
+              }
+              echo 'tagName=' + tagName
+            }
             sh '''
             echo 'Creating Docker Container...'
             echo 'FROM openjdk:8-jre' > Dockerfile
             echo 'COPY ./calculator-0.0.1-SNAPSHOT.jar app.jar' >> Dockerfile
             echo 'ENTRYPOINT ["java", "-jar", "app.jar"]' >> Dockerfile
             mv /mnt/calculator-0.0.1-SNAPSHOT.jar .
-            /kaniko/executor --context `pwd` --destination bsieraduml/hello-kaniko:1.0
+            /kaniko/executor --context `pwd` --destination 'bsieraduml/' + tagName
             '''
           }
         }
