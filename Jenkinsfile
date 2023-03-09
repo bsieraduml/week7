@@ -42,7 +42,7 @@ podTemplate(yaml: '''
         stage('Build a gradle project') {
           sh '''
           pwd
-          /* cd Chapter08/sample1 */
+          echo 'call chmod +x gradlew'
           chmod +x gradlew
           ./gradlew build
           mv ./build/libs/calculator-0.0.1-SNAPSHOT.jar /mnt
