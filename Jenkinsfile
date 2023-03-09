@@ -136,9 +136,9 @@ podTemplate(yaml: '''
 
               if [[ env.BRANCH_NAME = 'feature' ]] 
               then
-                /kaniko/executor --context `pwd` --destination tagName
+                /kaniko/executor --context `pwd` --destination $tagName
               else    
-                /kaniko/executor --context `pwd` --destination tagName
+                /kaniko/executor --context `pwd` --destination $tagName
               fi
             '''
           }
