@@ -101,7 +101,7 @@ podTemplate(yaml: '''
 
     stage('Build Java Image') {
       //only if the build succeeds; never for the playground branch
-      if (env.BRANCH_NAME != 'playground' && ${currentBuild.currentResult} == SUCCESS) {
+      if (env.BRANCH_NAME != 'playground' && "${currentBuild.currentResult}" == "SUCCESS") {
         container('kaniko') {
           stage('Build Image & Push to Dockerhub') {
             
@@ -128,7 +128,7 @@ podTemplate(yaml: '''
         } //container (kaniko)
       } else {
         echo 'Not running Build Java Image for branch => ' + env.BRANCH_NAME 
-        echo 'currentBuild.currentResult == ' + ${currentBuild.currentResult}
+        echo 'currentBuild.currentResult == ' + "${currentBuild.currentResult}"
       }       
     } //stage (outer)
 
