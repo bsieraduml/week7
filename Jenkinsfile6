@@ -12,6 +12,7 @@ pipeline {
                     sh "./gradlew compileJava"
                     echo 'edit feature branch'
                     echo 'edit playground branch'
+                    echo 'edit main branch'
                }
           }
           stage("Unit test") {
