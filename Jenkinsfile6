@@ -3,7 +3,7 @@ pipeline {
      triggers {
           pollSCM('* * * * *')
      }
-     stages {
+     stages { 
           stage("Compile") {
                steps {
                     git branch: 'main', url: 'https://github.com/bsieraduml/week6.git'
