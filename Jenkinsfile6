@@ -9,7 +9,7 @@ pipeline {
                     git branch: 'main', url: 'https://github.com/bsieraduml/week6.git'
                     echo 'Compile all branches'
                     sh "chmod +x gradlew"
-                    sh "./gradlew compileJava"
+                    sh "./gradlew compileJava" 
                     echo 'edit feature branch'
                     echo 'edit playground branch'
                     echo 'edit main branch'
