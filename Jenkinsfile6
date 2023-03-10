@@ -11,6 +11,7 @@ pipeline {
                     sh "chmod +x gradlew"
                     sh "./gradlew compileJava"
                     echo 'edit feature branch'
+                    echo 'edit playground branch'
                }
           }
           stage("Unit test") {
